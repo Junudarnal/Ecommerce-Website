@@ -1,0 +1,105 @@
+{% load static %}
+{% include 'home/base.html' %} 
+{% block content %} 
+<html>
+<head>
+    <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container" style = "padding: 10rem;">
+        <div style="height: 10rem; background-color: rgba(255,0,0,0.1);">
+            <div class = "ordersview">
+            <h3>Your order amount is Rs. {{order.total}}</h3> 
+            {% comment %} <button id= "button-33  payment-button">Pay with Khalti</button> {% endcomment %}
+           
+        </div>
+    </div>
+    <!-- HTML !-->
+<button class="button-33" id = "payment-button" role="button">Pay with Khalti</button>
+
+<style>
+.button-33 {
+  background-color: #F76566 ;
+  border-radius: 100px;
+  {% comment %} box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px; {% endcomment %}
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+  padding: 7px 20px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-33:hover {
+  {% comment %} box-shadow: #F76566; {% endcomment %}
+  transform: scale(1.05) rotate(-1deg);
+}
+</style>
+    <!-- Place this where you need payment button -->
+    
+    <!-- Place this where you need payment button -->
+    <!-- Paste this code anywhere in you body tag -->
+    <script>
+        var config = {
+            // replace the publicKey with yours
+            "publicKey": "test_public_key_3d744e13fc244e808daf55ca7e3a5bf7",
+            "productIdentity": "1234567890",
+            "productName": "Dragon",
+            "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
+            "paymentPreference": [
+                "KHALTI",
+                "EBANKING",
+                "MOBILE_BANKING",
+                "CONNECT_IPS",
+                "SCT",
+                ],
+            "eventHandler": {
+                onSuccess (payload) {
+                    // hit merchant api for initiating verfication
+                    axios.get("/user/khalti-verify",{
+                        params : {
+                            "token": payload.token,
+                            "amount":payload.amount,
+                            "order_id": `{{order.id}}`
+                        }
+                    }).then(function(resp){
+                        if (resp.status == 200 | resp.status == 201){
+                            window.alert("Payment completed Successfully ")
+                            location.href = "/"
+                        }
+                        else{
+                            alert("Sorry, Error Occured ")
+                            location.href = "{{request.build_absolute_uri}}"
+                        }
+                        
+                    })
+                },
+                onError (error) {
+                    console.log(error);
+                },
+                onClose () {
+                    console.log('widget is closing');
+                }
+            }
+        };
+
+        var checkout = new KhaltiCheckout(config);
+        var btn = document.getElementById("payment-button");
+        btn.onclick = function () {
+            // minimum transaction amount must be 10, i.e 1000 in paisa.
+            checkout.show({amount: {{total}}});
+        }
+    </script>
+    <!-- Paste this code anywhere in you body tag -->
+
+</body>
+</html>
+{% endblock %}

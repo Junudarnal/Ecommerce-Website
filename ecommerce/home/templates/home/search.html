@@ -1,0 +1,35 @@
+{% load static %} {% comment %} {% extend "base.html" %} {% endcomment %}
+{% include 'home/base.html' %} 
+
+
+{% block content%}
+<main class="container my-4" style = "padding : 10rem">
+	<!-- Featured Products -->
+	<h3 class="my-4 border-bottom pb-1"><span class="text-muted">Search result for {{search}}</span> {{request.GET.q}}</h3>
+	<div class = "row">
+		{% for products in data %}
+		<div class= "col-xl-4 col-lg-4 pt-4" >
+		  <a href = {% url 'product_detail' products.uuid %} class = "btn">
+			<div class="card">
+				<img src="{{products.image.url}}" class="card-img-top" alt="img" >
+				<div class="caption card-body">
+							  <h4 class="group card-title inner list-group-item-heading">
+								{{products.name}}</h4>
+							  <div class="row">
+								  <div class="col-xs-12 col-md-6">
+									  <p class="lead">
+										Rs.{{products.price}}</p>
+								  </div>
+								  <div class="col-xs-12 col-md-6">
+									  <a class="btn btn-success" style = "background-color : #F76566 ;  border: none;" href= "/products/productdetail/{{products.uuid}}/" >Product Details</a>
+								  </div>
+							  </div>
+						  </div>
+			  </div>
+			</a>
+			</div>
+		{% endfor %}
+	</div> 
+	  
+</main>
+{% endblock %}

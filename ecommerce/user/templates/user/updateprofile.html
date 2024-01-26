@@ -1,0 +1,34 @@
+{% load static %}
+{% include 'home/base.html' %} 
+{% load crispy_forms_tags %}
+{% block content %}
+
+ <main class="container my-4" style = "padding : 10rem;">
+	<!-- Featured Products -->
+	<h3 class="my-4 border-bottom pb-1">Edit Profile</h3>
+	<div class="row">
+		<div class="col-md-3"> 
+			 {% comment %} {% include 'user/user-sidebar.html' %} {% endcomment %} 
+		</div>
+		<div class="col-md-9">
+			{% if msg %}
+			<p class="text-success">{{msg}}</p>
+			{% endif %}
+			{% comment %} <table class="table table-bordered"> {% endcomment %}
+				<form method="POST" action = "" entype = "multipart/form-data">
+					{% csrf_token %}
+					{{form |crispy}}
+					{% comment %} {{p_form |crispy}} {% endcomment %}
+					<tr>
+						<td colspan="10">
+							<input type="submit" value="Save" class="btn btn-primary"  />
+							<a href = "/user/backtoprofile/" class="btn btn-primary">Back</a>
+						</td>
+					</tr>
+				</form>
+			{% comment %} </table> {% endcomment %}
+		</div>
+	</div>
+</main>
+
+{% endblock %}

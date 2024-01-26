@@ -1,0 +1,59 @@
+{% load static %}
+
+    {% include 'home/base.html' %} {% block content %} 
+    <div>
+        {% comment %} <nav class="navbar navbar-expand-lg navbar-light bg-light"> {% endcomment %}
+           <div class="container" style = "padding : 10rem;">
+            {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-primary" role="alert">
+                {{message}}
+              </div>
+              
+              {% endfor %}
+            {% endif %}
+            <h3>Jackets And Sweaters</h3>
+            <hr class="my-4">
+           
+            <div class = "row">
+              {% for jackswet in jackswets %}
+              <div class= "col-xl-4 col-lg-4 pt-4" >
+                <a href = {% url 'product_detail' jackswet.uuid %} class = "btn">
+                  <div class="card">
+                      <img src="{{jackswet.image.url}}" class="card-img-top" alt="img" >
+                      <div class="caption card-body">
+                                    <h4 class="group card-title inner list-group-item-heading">
+                                      {{jackswet.name}}</h4>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-6">
+                                            <p class="lead">
+                                              Rs.{{jackswet.price}}</p>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6">
+                                            <a class="btn btn-success" style = "background-color : #F76566 ;  border: none;" href= "/user/addtocart/{{jackswet.uuid}}/jacketswet/" >Add to cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                    </div>
+                  </a>
+                  </div>
+              {% endfor %}
+          </div> 
+            
+
+
+
+          </div>
+        {% comment %} </nav> {% endcomment %}
+
+            <script>
+              let messages = document.getElementsByClassName('messages');
+              if (messages && messages.length>0) {
+                window.alert(messages[0].value);
+              }
+            </script>
+
+    </div>
+
+
+    {% endblock %}

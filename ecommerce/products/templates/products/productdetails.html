@@ -1,0 +1,67 @@
+{% load static %}
+<link href="{% static 'css/homecss/productdetails.css' %}" type="text/css" rel="stylesheet">
+{% include 'home/base.html' %}
+{% block content %}
+<div class="container" style = "padding : 10rem;">
+    <div class="card">
+        <div class="container-fluid">
+            <div class="wrapper row">
+                <div class="preview col-xl-6 col-lg-4 pt-4">
+                    <div class="preview-pic tab-content">
+                      <div class="tab-pane active" id="pic-1"><img src="{{ProductDetail.image.url}}" /></div>
+                    </div>
+                </div>
+                <div class="details col-xl-6 col-lg-4 pt-4">
+                    <h3 class="product-title">{{ProductDetail.name}}</h3>
+                    {% comment %} <div class="rating">
+                        <div class="stars">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                        </div>
+                    </div> {% endcomment %}
+                    <p class="product-description">{{ProductDetail.description}}</p>
+                    <h4 class="price">current price: <span>Rs.{{ProductDetail.price}}</span></h4>
+                    {% comment %} <h5 class="sizes">sizes:
+                        <span class="size" data-toggle="tooltip" title="small">s</span>
+                        <span class="size" data-toggle="tooltip" title="medium">m</span>
+                        <span class="size" data-toggle="tooltip" title="large">l</span>
+                        <span class="size" data-toggle="tooltip" title="xtra large">xl</span>
+                    </h5> {% endcomment %}
+                    <h5 class="colors">colors: {{ProductDetail.color}}</h5>
+                    <form method = "POST" action = "/products/productdetail/{{ProductDetail.uuid}}/jacketswet/">
+                        {% csrf_token %}
+                        <input type = "hidden" value="{{ProductDetail.uuid}}" class = "prod_id" >
+                        <a class="btn btn-success" style = "background-color : #F76566 ;  border: none;" href= "/user/addtocart/{{ProductDetail.uuid}}/jacketswet/" >Add to cart</a>
+                        {% comment %} <button class="add-to-cart btn btn-default" type="button">add to cart</button> {% endcomment %}
+                        {% comment %} <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button> {% endcomment %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% comment %} <div class = "container ">
+    <div class = "row">
+        <div class="col-xl-6 col-lg-4 pt-4">
+            <img src="{{ProductDetail.image.url}}" class="card-img-top" alt="img">
+        </div>
+        <div class="col-xl-6 col-lg-4 pt-4">
+                <h5 class="card-title" name = "name">{{ProductDetail.name}}</h5>
+                <p class="card-text" name ="description">{{ProductDetail.description}}</p>
+                <p class="card-text" name = "price">Rs.{{ProductDetail.price}}</p>
+                <form method = "POST" action = "{% url 'add_to_cart' ProductDetail.uuid %}">
+                    {% csrf_token %}
+                    <input type = "hidden" value="{{ProductDetail.uuid}}" class = "prod_id" >
+                    <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block">Add to cart</button>
+                </form><br>
+                <a href = "{% url 'cart' %}" class="btn btn-secondary btn-lg btn-block">Shop Now </a>
+        </div>
+    
+    </div>
+
+</div> {% endcomment %}
+
+{% endblock %}

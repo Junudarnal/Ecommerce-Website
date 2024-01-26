@@ -1,0 +1,240 @@
+{% load static %}
+{% include 'home/base.html' %} 
+{% block content %} 
+
+<section class="h-100 h-custom" style=" padding: 5rem;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      {% if cart %}
+      <div class="col">
+        <div class="card">
+          <div class="card-body p-4">
+           
+            <div class="row">
+              
+              <div class="col-lg-7">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <div>
+                    <p class="mb-1" style = "font-size : 20px; font-weight : bold;">Shopping cart</p>
+                    
+                  </div>
+                </div>
+                {% for item in cart %}
+
+               
+
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div class="d-flex flex-row align-items-center">
+                        <div>
+                          <img src="{{item.product.image.url}}" class="img-fluid img-thumbnail shadow-sm" alt="img" style="width: 100px;">
+                        </div>
+                        <div class="ms-3">
+                          <h5>{{item.product.name}}</h5>
+                          <input type="hidden" value="{{item.product.price}}" class="item-unit-price">
+                          <input type="hidden" value="{{item.product.quantity}}" class="item-total-quantity">
+                          <p class="small mb-0">Color :{{item.product.color}}</p>
+                        </div>
+                      </div>
+                      <div class="d-flex flex-row align-items-center">
+                        <label for = "Quantity">Quantity</label>
+                        <div style="width: 200px;">
+                          <form action="{% url 'cart_update' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value={{item.id}} name="cart_id">
+                          <button class = " minus-cart btn" pid = {{item.product.uuid}} type="submit"><i class = " fas fa-minus-square fa-lg"></i></button>
+                          <input type="number" class="quantity" value={{item.quantity}} min="0" name="quantity" style="width: 5rem;">
+                          <button class = " plus-cart btn" pid = {{item.product.uuid}} type="submit"><i class = " fas fa-plus-square fa-lg"></i></button>
+                        </form>
+                        </div>
+                        <div style="width: 80px;">
+                          <h5 class="mb-0"><span><strong  class="request-item-price">Rs. {{item.total_price}}</strong></span></h5>
+                        </div>
+                        <a href="/user/removeitem/{{item.id}}/" class = "remove-cart btn btn-sm secondary mr-3" pid= {{item.product.uuid}} style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %} 
+              </div>
+              
+              <div class="col-lg-5">
+
+                <div class="card text-black rounded-3" >
+                  <div class="card-body">
+                  <h3>Summary</h3>
+                    <hr class="my-4">
+
+                    <div class="d-flex justify-content-between">
+                      <p class="mb-2">Subtotal</p>
+                      <p class="mb-2"><span id = "sub-total">Rs. {{amount}}</span></p>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                      <p class="mb-2">Shipping</p>
+                      <p class="mb-2">Rs. 100</p>
+                    </div>
+
+
+                    <div class="d-flex justify-content-between mb-4">
+                      <p class="mb-2">Total</p>
+                      <p class="mb-2"><span id = "totalamount"><strong id="all-total"> Rs. {{totalamount}}</strong></span></p>
+                    </div>
+                    <div class = "btn btn-info btn-block btn-lg" style = "background-color: #F76566 ; border: none; "><a href= "{% url 'checkout' %}" ><p class ="mb-2" style = "color: white; text-decoration = none;"> Proceed to Checkout</p></a>
+                    </div>
+                    {% comment %} <button type="button" class="btn btn-info btn-block btn-lg">
+                      <div class="d-flex justify-content-between">
+                        <span>Rs. {{totalamount}}</span>
+                        <span >Checkout <i href= "{% url 'checkout' %}" class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                      </div>
+                    </button> {% endcomment %}
+
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <h1 class = "text-center mb-5">Cart is Empty</h1>
+      {% endif %}
+    </div>
+  </div>
+</section>
+<script>
+  let plus_cart = document.getElementsByClassName('plus-cart');
+  let minus_cart = document.getElementsByClassName('minus-cart');
+  let request_quantity = document.getElementsByClassName('quantity');
+  let item_total_price = document.getElementsByClassName('request-item-price');
+  let item_total_quantity= document.getElementsByClassName('item-total-quantity');
+  let item_unit_price = document.getElementsByClassName('item-unit-price');
+  let sub_total = document.getElementById("sub-total");
+  let all_total = document.getElementById("all-total");
+
+
+
+  // let sub_total = document.getElementsByClassName('amount');
+  // let total = document.getElementById("totalamount");
+  // console.log(item_unit_price);
+  // let calculateTotal = ()=>{
+  // let prices = []
+  
+  // console.log("price: ", item_total_price)
+
+  // calculateTotal();
+  for(let i=0; i<plus_cart.length; i++){
+    let input_value = parseInt(request_quantity[i].value);
+    // console.log(input_value);
+    // console.log(item_total_quantity[i]);
+    // prices.push(item_total_quantity[i]);
+    plus_cart[i].addEventListener('click', ()=>{
+      if(parseInt(item_total_quantity[i].value)>parseInt(request_quantity[i].value))
+      {
+        // console.log();
+      request_quantity[i].value = input_value+=1;
+      item_total_price[i].innerHTML = "Rs " + parseInt(request_quantity[i].value) * parseInt(item_unit_price[i].value);
+      sub_total.innerHTML = "Rs." + parseInt(request_quantity[i].value)*parseInt(request_quantity[i].value) * parseInt(item_unit_price[i].value);
+      all_total.innerHTML = "Rs." + (parseInt(request_quantity[i].value)*parseInt(request_quantity[i].value) * parseInt(item_unit_price[i].value)+parseInt(100));
+      // console.log(item_total_price[i].innerHTML);
+    }
+    else{
+      item_total_quantity[i].value = parseInt(item_total_quantity[i].value)
+      request_quantity[i].value = input_value;
+      window.alert("You can't added more quantity!!")
+      // {% comment %} item_total_price[i].innerHTML = parseInt(quantity[i].value) * parseInt(item_unit_price[i].value); {% endcomment %}
+    }
+
+    })
+  }
+  for(let i=0; i<minus_cart.length; i++){
+    minus_cart[i].addEventListener('click', ()=>{
+      let input_value = parseInt(request_quantity[i].value);
+      // console.log(quantity[i].value);
+      if (request_quantity[i].value>=2){
+      request_quantity[i].value = input_value-=1;
+      let quantity_temp = request_quantity[i].value;
+      item_total_price[i].innerHTML = "Rs. " + parseInt(request_quantity[i].value) * parseInt(item_unit_price[i].value);
+      sub_total.innerHTML = "Rs." + parseInt(request_quantity[i].value)*parseInt(request_quantity[i].value) * parseInt(item_unit_price[i].value);
+      all_total.innerHTML = "Rs." + (parseInt(request_quantity[i].value)*parseInt(request_quantity[i].value) * parseInt(item_unit_price[i].value)+parseInt(100));
+      }
+      else{
+      window.alert("Quantity shouldn't be less than 1.")
+      request_quantity[i].value = 1;
+      }
+    })
+  }
+  // let prices = []
+
+
+
+
+
+
+    // let hiddenQuantityField = document.getElementsByClassName("hidden-quantity-field");
+    // var plus = document.getElementsByClassName("increment-count");
+    // var minus = document.getElementsByClassName("decrement-count");
+    // const totalCount = document.getElementsByClassName("total-count");
+    // let item_unit_price = document.getElementsByClassName("item_unit_price");
+    // let item_quantity = document.getElementsByClassName("item_quantity");
+    // let unit_price = document.getElementsByClassName("item_price");
+    // let changingprice = document.getElementsByClassName("changingprice");
+    // var count = 0;
+    // console.log("plus: ", plus, "MINUS: ", minus, "totalCount: ", totalCount, "unit_price", unit_price)
+
+  // for (let i = 0; i <= unit_price.length; i++) {
+  //       plus[i].addEventListener("click", () => {
+  //           // console.log("Here");
+  //           // console.log("this: ", parseInt(unit_price[i].innerHTML))
+  //           // console.log(item_quantity[i]);
+  //           // console.log(parseInt(totalCount[i].innerHTML))
+  //           console.log(parseInt(totalCount[i].innerHTML) , parseInt(item_quantity[i].value))
+  //           if (parseInt(totalCount[i].innerHTML) < item_quantity[i].value) {
+  //           totalCount[i].innerHTML = parseInt(totalCount[i].innerHTML) + 1;
+  //           hiddenQuantityField[i].value = parseInt(hiddenQuantityField[i].value) + 1;
+  //               console.log("here");
+  //               changingprice[i].innerHTML =
+  //                   "Total: " + item_unit_price[i].value * parseInt(totalCount[i].innerHTML);
+  //           }
+  //           else{
+  //            totalCount[i].innerHTML = parseInt(totalCount[i].innerHTML);
+  //           hiddenQuantityField[i].value = parseInt(hiddenQuantityField[i].value) ;
+  //               totalCount[i].innerHTML = item_quantity[i].value;
+  //           }
+  //           })
+  //       minus[i].addEventListener("click", () => {
+  //           // console.log(unit_price[i].value * parseInt(totalCount[i].innerHTML));
+  //           totalCount[i].innerHTML = parseInt(totalCount[i].innerHTML) - 1;
+  //           hiddenQuantityField[i].value = parseInt(hiddenQuantityField[i].value) - 1;
+  //           if (totalCount[i].innerHTML >= 1) {
+  //               changingprice[i].innerHTML =
+  //                   "Total: " + item_unit_price[i].value * parseInt(totalCount[i].innerHTML);
+
+  //           } else {
+  //               totalCount[i].innerHTML = 1;
+  //           }
+  //       })
+  //   }
+
+
+
+  //   plus.addEventListener("click", () => {
+  //       console.log("hello");
+  //       count++;
+  //       totalCount.innerHTML = count;
+
+  //   });
+  //   minus.addEventListener("click", () => {
+  //       console.log("minus")
+  //       count--;
+  //       totalCount.innerHTML = count;
+  //   })
+
+
+</script>
+{% endblock %}
+

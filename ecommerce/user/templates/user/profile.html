@@ -1,0 +1,52 @@
+{% load static %} 
+<link href="{% static 'css/homecss/userdash.css' %}" rel="stylesheet">
+    {% include 'home/base.html' %} {% block content %} 
+    
+    
+        <div class="container" style = "padding : 10rem;">
+                 
+<h2><strong>Profile</strong></h2> 
+
+    <div class="row" >
+        <!--<div class="container user-profile">-->
+        <div class="col-5 user-profile" >
+            <div class="card user-profile-card">
+                <img class="card-user-img" src={{request.user.profile.image.url}} alt="Card image cap" id="image1">
+            
+    
+                <div class="user-profile-button">
+                    <p class="user-details">{{request.user.username}}</p>
+                    <p class="user-email" style="margin-top: 2rem;">{{request.user.email}}</p>
+    
+    
+                </div>
+                <p class="user-account">Account</p>
+    
+                 <p><i class="fa fa-edit user-profile-edit-icon" aria-hidden="true"></i><a class="user-profile-edit" href="{% url 'update_profile' %}">Edit
+                    Profile</a></p> 
+                    {% comment %} {% url 'update_profile' user.id %}"> {% endcomment %}
+                <p><i class="fa fa-sign-out user-profile-delete-icon" aria-hidden="true"></i><a class="user-profile-logout" href="{% url 'logout' %}">Logout</a>
+                </p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card user-personal">
+    
+                <p class="user-personal-info-head">Personal Information</p>
+                <div class="user-personal-info">
+                    <p>Name: {{request.user.username}}</p>
+                    <p>Email: {{request.user.email}}</p>
+                    <p>Contact Number: {{request.user.profile.contact}}</p>
+                </div>
+            </div>
+            <div class="card user-history">
+                <div class="user-order-title">
+                <p class="user-order-history"><a href="{% url 'orderhistory' %}">View order history</a></i></p>
+                </div>
+            </div>
+        </div>
+        <!--        </div>-->
+    </div>
+
+    
+    {% endblock %}

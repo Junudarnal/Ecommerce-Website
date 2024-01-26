@@ -1,0 +1,36 @@
+{% load static %} {% comment %} {% extend "base.html" %} {% endcomment %}
+{% load crispy_forms_tags %}
+
+    {% include 'home/base.html' %} {% block content %} 
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-primary" role="alert">
+      {{message}}
+    </div>
+    
+    {% endfor %}
+  {% endif %}
+    <div>
+    <nav class="navbar navbar-expand-lg navbar-light " style = " padding: 10rem;">
+      <div class="container">
+    <form action="" method="POST">
+      {% csrf_token %}
+      <fieldset class="form-group">
+          <legend class="border-bottom mb-4" style="color: Black;">Sign In Now</legend>
+          {{ form|crispy }}
+      </fieldset>
+      {% for message in messages %}
+      <p id = "messages">{{message}}</p>
+      {% endfor%}
+      <div class="form-group" id="signup-button">
+          <button class="btn "  style = "color: white; background-color: #F76566 ;" href="{% url 'login' %}">Sign In</button>
+          <small class="text-muted ml-3" >Don't have an account yet? <a href="{% url 'signup' %}">Sign Up Today</a></small>
+      </div>
+      
+          
+      
+    </form>
+  </div>
+</nav>
+</div>
+{% endblock %}

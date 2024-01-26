@@ -1,0 +1,31 @@
+
+PRODUCTCATEGORY =[
+    ('JACKET_AND_SWEATER','JACKET_AND_SWEATER'),
+    ('TOPS','TOPS'),
+    ('T-SHIRT','T-SHIRT'),
+    ('PANTS','Pants'),
+    ('ALL', 'ALL')
+]
+STOCK = [
+    ('IN_STOCK','IN_STOCK'),
+    ('OUT_OF_STOCK','OUT_OF_STOCK' )
+    
+]
+
+STATUS = [
+    ('PUBLISH','PUBLISH'),
+    ('DRAFT','DRAFT' )
+    
+]
+
+ORDER_STATUS = [
+    ('ORDER PENDING', 'ORDER PENDING'),   
+    ('ORDER COMPLETED', 'ORDER COMPLETED'),
+]
+
+
+
+METHOD = [
+    ('KHALTI', 'KHALTI' ),
+    ('CASH ON DELIVERY', 'CASH ON DELIVERY')
+]

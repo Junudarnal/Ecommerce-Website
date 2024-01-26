@@ -1,0 +1,53 @@
+{% load static %} {% comment %} {% extend "base.html" %} {% endcomment %}
+
+    {% include 'home/base.html' %} {% block content %} 
+    <div>
+      {% comment %} <nav class="navbar navbar-expand-lg navbar-light bg-light"> {% endcomment %}
+         <div class="container" style = "padding : 10rem;">
+          {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-primary" role="alert">
+            {{message}}
+          </div>
+          {% endfor %}
+          {% endif %}
+          <h3>Tops</h3>
+            <hr class="my-4">
+          <div class = "row">
+            {% for top in tops %}
+            <div class= "col-xl-4 col-lg-4 pt-4" >
+              <a href = {% url 'product_detail' top.uuid %} class = "btn">
+                <div class="card">
+                    <img src="{{top.image.url}}" class="card-img-top" alt="img" >
+                    <div class="caption card-body">
+                                  <h4 class="group card-title inner list-group-item-heading">
+                                    {{top.name}}</h4>
+                                  <div class="row">
+                                      <div class="col-xs-12 col-md-6">
+                                          <p class="lead">
+                                            Rs.{{top.price}}</p>
+                                      </div>
+                                      <div class="col-xs-12 col-md-6">
+                                          <a class="btn btn-success" style = "background-color : #F76566 ;  border: none;"  href= "/user/addtocart/{{top.uuid}}/tops/">Add to cart</a>
+                                      </div>
+                                  </div>
+                              </div>
+                  </div>
+                </a>
+                </div>
+            {% endfor %}
+        </div> 
+          
+    
+    
+    
+        </div>
+      {% comment %} </nav> {% endcomment %}
+      <script>
+        let messages = document.getElementsByClassName('messages');
+        if (messages && messages.length>0) {
+          window.alert(messages[0].value);
+        }
+      </script>
+    </div>
+    {% endblock %}
